@@ -7,5 +7,6 @@ def setup_routes(app):
 
     app.router.add_routes([
         web.get("/hello/{name}", handler.hello),
-        web.get("/get/json", handler.get_json)
+        web.get("/get/json", handler.get_json),
+        web.post("/post/file", handler.post_file)
     ])

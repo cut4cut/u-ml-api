@@ -1,4 +1,7 @@
+import os
+
 import asyncio
+
 from aiohttp import web
 
 class Handler:
@@ -16,3 +19,13 @@ class Handler:
     def get_json(self, request):
         data = {'hello': 'word'}
         return web.json_response(data)
+
+    async def post_file(self, request):
+        data = await request.post()
+        file = data['file'] # как словарь
+        #print(file) # 
+        #print(file.file, file.filename)
+        f = file.file # _io.BufferedRandom
+        chars = f.read(20)
+
+        return  web.Response(text='Successfully read first 20 chars: {0}'.format(chars))
