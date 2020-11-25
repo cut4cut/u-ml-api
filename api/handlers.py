@@ -20,12 +20,36 @@ class Handler:
         data = {'hello': 'word'}
         return web.json_response(data)
 
-    async def post_file(self, request):
-        data = await request.post()
-        file = data['file'] # как словарь
-        #print(file) # 
-        #print(file.file, file.filename)
-        f = file.file # _io.BufferedRandom
-        chars = f.read(20)
+    async def post_excel(self, request):
+        reader = await request.multipart()
 
-        return  web.Response(text='Successfully read first 20 chars: {0}'.format(chars))
+        field = await reader.next()
+
+        size = 0
+        with open(os.path.join('./api/tmp/data/', 'loaded.xlsx'), 'wb+') as f:
+            while True:
+                chunk = await field.read_chunk()  # 8192 bytes by default.
+                if not chunk:
+                    break
+                size += len(chunk)
+                f.write(chunk)
+
+        #web.Response(text='Excel-report sized of {0} successfully stored'.format(size))
+        return web.FileResponse(path='./api/tmp/data/loaded.xlsx', status=200) 
+
+    async def post_jpg(self, request):
+        reader = await request.multipart()
+
+        field = await reader.next()
+
+        size = 0
+        with open(os.path.join('./api/tmp/data/', 'loaded.jpg'), 'wb+') as f:
+            while True:
+                chunk = await field.read_chunk()  # 8192 bytes by default.
+                if not chunk:
+                    break
+                size += len(chunk)
+                f.write(chunk)
+
+        #web.Response(text='Excel-report sized of {0} successfully stored'.format(size))
+        return web.FileResponse(path='./api/tmp/data/loaded.jpg', status=200) 

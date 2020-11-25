@@ -133,3 +133,18 @@ dmypy.json
 
 # PDF-files
 *.pdf
+
+# Image files
+*.png
+*.jpg 
+*.tiff
+
+# Excel-files 
+*.xlsx
+*.xlsm
+*.xlsb
+*.xltx
+*.xls
+*.xlt
+*.xltm
+*.xlr
