@@ -69,3 +69,9 @@ class Handler:
 
         #return web.Response(text=link1)
         return web.FileResponse(path='./api/tmp/data/loaded_1.xlsx', status=200) 
+
+    async def get_plot(self, request):
+        name = request.match_info.get('name', "Anonymous")
+        
+        #web.Response(text='Excel-report sized of {0} successfully stored'.format(size))
+        return web.FileResponse(path='./api/tmp/data/plot_exemple.png', status=200) 
