@@ -9,5 +9,6 @@ def setup_routes(app):
         web.get("/hello/{name}", handler.hello),
         web.get("/get/json", handler.get_json),
         web.post("/post/excel", handler.post_excel),
-        web.post("/post/jpg", handler.post_jpg)
+        web.post("/post/jpg", handler.post_jpg),
+        web.post("/post/links", handler.post_links)
     ])

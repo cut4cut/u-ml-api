@@ -139,6 +139,12 @@ dmypy.json
 *.jpg 
 *.tiff
 
+# Text files
+*.txt
+*.csv 
+*.dsv
+*.tsv
+
 # Excel-files 
 *.xlsx
 *.xlsm

@@ -1,6 +1,7 @@
 import os
 
 import asyncio
+import requests
 
 from aiohttp import web
 
@@ -53,3 +54,18 @@ class Handler:
 
         #web.Response(text='Excel-report sized of {0} successfully stored'.format(size))
         return web.FileResponse(path='./api/tmp/data/loaded.jpg', status=200) 
+
+    async def post_links(self, request):
+        reader = await request.json()
+
+        #print(reader)
+        link1 = reader['file1']
+        #link2 = reader['file2']
+
+        r1 = requests.get(link1)
+
+        with open("./api/tmp/data/loaded_1.xlsx", "wb") as file:
+            file.write(r1.content)
+
+        #return web.Response(text=link1)
+        return web.FileResponse(path='./api/tmp/data/loaded_1.xlsx', status=200) 

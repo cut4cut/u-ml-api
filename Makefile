@@ -1,2 +1,2 @@
 run:
-	python -m aiohttp.web -H localhost -P 8080 api.main:init
+	python3 -m api --host localhost --port 8080
