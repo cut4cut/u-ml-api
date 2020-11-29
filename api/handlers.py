@@ -8,8 +8,10 @@ import pandas as pd
 from aiohttp import web
 from pathlib import Path
 
-from api.utilies import fileworker as fw
 from api.utilies import plotstats as ps
+from api.utilies import fileworker as fw
+
+from api.utilies.fileworker import get_raiting_
 
 class Handler:
 
@@ -85,12 +87,25 @@ class Handler:
 
         return web.FileResponse(path='./api/tmp/cashes/reports/out_report.xlsx', status=200) 
 
+    async def get_raiting(self, request):
+        params = request.match_info.get('params', 'Anonymous')
+        arr = params.split('_')
+        dataset = pd.read_csv('./api/tmp/cashes/data/dataset.csv')
+        
+        column = arr[0]
+        month = arr[1]
+        print(params)
+        raiting_json = get_raiting_(dataset, month, column)
+
+        return web.json_response(raiting_json)
+
     async def get_plot(self, request):
         main_path = './api/tmp/cashes/plots/{0}'
-        fig_name = request.match_info.get('name', "Anonymous")
+        fig_name = request.match_info.get('name', 'Anonymous')
 
         fig_path = main_path.format(fig_name) + '.png'
         fig_file = Path(fig_path)
+        #print(fig_file)
         if fig_file.is_file():
             return web.FileResponse(path=fig_path, status=200)
         else:
@@ -104,4 +119,7 @@ class Handler:
 
 
         #web.Response(text='Excel-report sized of {0} successfully stored'.format(size))
+
+
+    
         

@@ -9,6 +9,18 @@ from os.path import isfile, join
 
 from xlrd import XLRDError
 
+def get_raiting_(dataset, month, by_column):
+    return dataset\
+                [dataset['month'] == month]\
+                .groupby(by=['machine_type', 'machine_number'])\
+                .sum()\
+                .sort_values(by=by_column, ascending=False)\
+                .reset_index()\
+                [:5]\
+                [['machine_type','machine_number', by_column]]\
+                .T\
+                .to_json()
+
 class Worker:
 
     def __init__(self, path):
