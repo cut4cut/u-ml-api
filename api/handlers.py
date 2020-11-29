@@ -121,5 +121,17 @@ class Handler:
         #web.Response(text='Excel-report sized of {0} successfully stored'.format(size))
 
 
+    async def get_model(self, request):
+        main_path = './api/tmp/cashes/models/{0}'
+        fig_name = request.match_info.get('name', 'Anonymous')
+
+        fig_path = main_path.format(fig_name) + '.png'
+        fig_file = Path(fig_path)
+        #print(fig_file)
+        if fig_file.is_file():
+            return web.FileResponse(path=fig_path, status=200)
+        else:
+            return web.Response(text='Извините, модель на обучении ;-)')
+
     
         
