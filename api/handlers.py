@@ -89,7 +89,7 @@ class Handler:
 
     async def get_raiting(self, request):
         params = request.match_info.get('params', 'Anonymous')
-        arr = params.split('_')
+        arr = params.split('|')
         dataset = pd.read_csv('./api/tmp/cashes/data/dataset.csv')
         
         column = arr[0]
