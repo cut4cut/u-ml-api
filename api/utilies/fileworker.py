@@ -161,9 +161,9 @@ class Worker:
 
         max_day = monthrange(year, month)[1]
 
-        if self.russian_months[month-1] != file_name.split()[2]:
-            print(self.russian_months[month-1] , file_name.split()[2])
-            return 'ERROR'
+        #if self.russian_months[month-1] != file_name.split()[2]:
+        #    print(self.russian_months[month-1] , file_name.split()[2])
+        #    return 'ERROR'
 
         print('File name: {0}, first day: {1}, max days in month: {2}'.format(file_path, report_dt, max_day))
 
