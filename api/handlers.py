@@ -3,9 +3,13 @@ import os
 import asyncio
 import requests
 
+import pandas as pd
+
 from aiohttp import web
+from pathlib import Path
 
 from api.utilies import fileworker as fw
+from api.utilies import plotstats as ps
 
 class Handler:
 
@@ -66,23 +70,38 @@ class Handler:
         r1 = requests.get(link1)
         r2 = requests.get(link2)
 
-        with open("../api/tmp/cashes/reports/АПВО.xlsx", "wb") as file:
+        with open("./api/tmp/cashes/reports/АПВО.xlsx", "wb") as file:
             file.write(r1.content)
         
-        with open("../api/tmp/cashes/reports/ССПС.xlsx", "wb") as file:
+        with open("./api/tmp/cashes/reports/ССПС.xlsx", "wb") as file:
             file.write(r2.content)
 
-        worker = fw.Worker('../api/tmp/cashes/reports')
+        worker = fw.Worker('./api/tmp/cashes/reports')
 
         worker.read_files()
         worker.make_dataset()
         worker.make_report()
         worker.save_report('out_report.xlsx')
 
-        return web.FileResponse(path='../api/tmp/cashes/reports/out_report.xlsx', status=200) 
+        return web.FileResponse(path='./api/tmp/cashes/reports/out_report.xlsx', status=200) 
 
     async def get_plot(self, request):
-        name = request.match_info.get('name', "Anonymous")
+        main_path = './api/tmp/cashes/plots/{0}'
+        fig_name = request.match_info.get('name', "Anonymous")
+
+        fig_path = main_path.format(fig_name) + '.png'
+        fig_file = Path(fig_path)
+        if fig_file.is_file():
+            return web.FileResponse(path=fig_path, status=200)
+        else:
+            name_date = fig_name.split('_')
+            machine_type = name_date[0]
+            date = name_date[1]
+            data = pd.read_csv('./api/tmp/cashes/data/data_m.csv')
+            ps.plot_rate_fact(data, machine_type, date, fig_path=main_path)
+
+            return web.FileResponse(path=fig_path, status=200) 
+
 
         #web.Response(text='Excel-report sized of {0} successfully stored'.format(size))
-        return web.FileResponse(path='./api/tmp/data/plot_exemple.png', status=200) 
+        
